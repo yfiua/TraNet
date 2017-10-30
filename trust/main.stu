@@ -1,0 +1,58 @@
+@all: @traditional @svd @tradaboost @transfer;
+
+@traditional: [dep.traditional];
+@transfer: [dep.transfer];
+@svd: [dep.svd];
+@tradaboost: [dep.tradaboost];
+
+>SOURCES { echo epinions slashdotzoo }
+>FUNCS { echo none all }
+
+>dep.traditional:
+{
+    echo "res/traditional.csv"
+}
+
+>dep.transfer: SOURCES FUNCS
+{
+    for SOURCE in $(cat SOURCES) ; do
+        for FUNC in $(cat FUNCS) ; do
+            echo "res/transfer-$SOURCE-$FUNC.csv"
+        done
+    done
+}
+
+>dep.$METHOD: SOURCES
+{
+    for SOURCE in $(cat SOURCES) ; do
+        echo "res/$METHOD-$SOURCE.csv"
+    done
+}
+
+$DIR/: { mkdir -p $DIR }
+
+>res/traditional.csv: 
+    -p res/
+    trust-trad.py
+{
+    python trust-trad.py
+}
+
+>res/$METHOD-$SOURCE.csv: 
+    -p res/
+    trust-$METHOD.py
+{
+    python trust-$METHOD.py $SOURCE
+}
+
+>res/transfer-$SOURCE-$FUNC.csv:
+    -p res/
+    trust-transfer.py
+{
+    python trust-transfer.py $SOURCE $FUNC
+}
+
+@clear:
+{
+    rm -rf SOURCES FUNCS dep.*
+}
