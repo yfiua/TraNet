@@ -1,9 +1,5 @@
 @all: @svd @tradaboost;
 
-# Get part of the results from the ``wiki-talk'' repository!
-#@traditional: [dep.traditional];
-#@transfer: [dep.transfer];
-
 @svd: res/bot-transductive-svd.csv res/admin-transductive-svd.csv;
 @tradaboost: res/bot-transductive-tradaboost.csv res/admin-transductive-tradaboost.csv;
 
